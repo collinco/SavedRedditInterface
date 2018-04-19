@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <title>My Reddit Saved</title>
+</head>
+<body>
+    {{#each subreddits}}  
+        <div>
+            <a href="#{{this}}" style="padding: 10px 20px 10px 20px; float:left; margin:0">{{this}}</a>
+        </div>
+    {{/each}}
+
+    <br>
+
+    <div>
+        {{> header}}
+    </div>
+
+    <h2>Saved Reddit Links</h2>  
+        {{#each formattedData}}      
+            <h3 id="{{@key}}">{{@key}}</h3>
+            {{#each this}}
+                <div>
+                    <a href="https://www.reddit.com{{permalink}}">{{title}}</a>
+                </div>
+            {{/each}}
+            <div>{{subreddit_name_prefixed}}</div>
+            <br>
+            <hr>
+        {{/each}}
+    <footer>
+        <p>Copyright {{getCurrentYear}}</p>
+    </footer>
+</div>
+</body>
+</html>
