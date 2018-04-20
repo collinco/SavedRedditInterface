@@ -2,10 +2,9 @@
 const snoowrap = require('snoowrap');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const http = require('http');
-var express = require('express')
+var express = require('express');
 const hbs = require('hbs');
 var config = require('./config');
-
 
 
 hbs.registerPartials(__dirname + '/views/partials');
@@ -20,10 +19,10 @@ hbs.registerHelper('getCurrentYear', function () {
 
 var app = express();
 
+app.use("/assets", express.static(__dirname + "/assets"));
+
 const hostname = '127.0.0.1';
 const port = 3000;
-
-var crap = [{ test : 'hmmm', test2 : '2'}, { test : 'hhmm', test2 : 'Cole'}]
 
 const r = new snoowrap({
     userAgent:  config.userAgent,

@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <link rel="stylesheet" type="text/html" href="mystyle.css">
     <title>My Reddit Saved</title>
 </head>
 <body>
+    <p id="demo"></p>
+
     {{#each subreddits}}  
         <div>
             <a href="#{{this}}" style="padding: 10px 20px 10px 20px; float:left; margin:0">{{this}}</a>
@@ -36,5 +38,8 @@
         <p>Copyright {{getCurrentYear}}</p>
     </footer>
 </div>
+
+{{!-- load last --}}
+<script src="../assets/scripts/index.js"></script>
 </body>
 </html>
