@@ -22,7 +22,7 @@
         {{> header}}
     </div>
 
-    <h2>Saved Reddit Links</h2>  
+    <h2>Saved Reddit Posts</h2>  
         {{#each formattedData}}      
             <h3 id="{{@key}}">{{@key}}</h3>
             {{#each this}}
@@ -34,6 +34,21 @@
             <br>
             <hr>
         {{/each}}
+
+    <br>
+    <h2>Saved Reddit Comments</h2>  
+
+    {{#each formmatedComments}}   
+        <h3 id="{{@key}}">{{@key}}</h3>
+        {{#each this}}
+            <div>
+                <a href="{{link_permalink}}">{{body}}</a>
+            </div>
+        {{/each}}
+        <div>{{subreddit_name_prefixed}}</div>
+        <br>
+        <hr>
+    {{/each}}
     <footer>
         <p>Copyright {{getCurrentYear}}</p>
     </footer>

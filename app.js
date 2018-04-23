@@ -33,6 +33,7 @@ const r = new snoowrap({
 });
 
 var sortedObj = {};
+var sortedComments = {};
 var subreddits = [];
 var counts = {};
 
@@ -53,14 +54,21 @@ app.get('/', (req, res) => {
       
     // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
-        var formattedData = seperateCategories(jsonResponse);
+        seperateCategories(jsonResponse);
 
         res.render('about.hbs', {
             pageTitle: 'About',
-            formattedData : formattedData,
+            formattedData : sortedObj,
+            formmatedComments : sortedComments, 
             subreddits : subreddits,
             counts : counts
         });
+    })
+})
+
+app.get('/unformatted', (req, res) => {
+    var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
+        res.send(jsonResponse);
     })
 })
 
@@ -70,22 +78,25 @@ app.listen(5656, () => {
 
 var seperateCategories = function (unsortedObj) {
     for (var i = 0; i < unsortedObj.length; i++) {
-        if (sortedObj[unsortedObj[i].subreddit_name_prefixed]){
-            sortedObj[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
-        } else {
-            sortedObj[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
-
-            //add to subreddits array since this is first TODO DRY
-            subreddits.push(unsortedObj[i].subreddit_name_prefixed);
+        // if object is a post
+        // using body_html to differentiate posts form comments
+        if (unsortedObj[i].body_html === undefined) {
+            if (sortedObj[unsortedObj[i].subreddit_name_prefixed]){
+                sortedObj[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
+            } else {
+                sortedObj[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
+    
+                //add to subreddits array since this is first TODO DRY
+                subreddits.push(unsortedObj[i].subreddit_name_prefixed);
+            }
+        }
+        // if object is a comment    
+        else {
+            if (sortedComments[unsortedObj[i].subreddit_name_prefixed]){
+                sortedComments[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
+            } else {
+                sortedComments[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
+            }
         }
     }
-    
-    console.log('subreddits', subreddits)
-    console.log('sortedObj', Object.getOwnPropertyNames(sortedObj));
-    for ( var variable in sortedObj) {
-        console.log("the variable " + variable + " has " + sortedObj[variable].length)
-    }
-
-
-    return sortedObj;
 } 
