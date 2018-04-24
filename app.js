@@ -32,6 +32,7 @@ const r = new snoowrap({
     password: config.password
 });
 
+var data = null;
 var sortedObj = {};
 var sortedComments = {};
 var subreddits = [];
@@ -54,8 +55,8 @@ app.get('/', (req, res) => {
       
     // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+        data = jsonResponse
         seperateCategories(jsonResponse);
-
         res.render('about.hbs', {
             pageTitle: 'About',
             formattedData : sortedObj,
@@ -70,6 +71,19 @@ app.get('/unformatted', (req, res) => {
     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
         res.send(jsonResponse);
     })
+})
+
+app.get('/unsubscribe/:id', (req, res) => {
+    console.log(req.params.id);
+    for (var i = 0, len = data.length; i < len; i++) {
+        if (data[i].id === req.params.id) {
+            r.getSubmission(req.params.id).unsave().then(test => {
+                res.send('success');
+            })
+        }
+    }
+    // res.send('fail')   
+    
 })
 
 app.listen(5656, () => {

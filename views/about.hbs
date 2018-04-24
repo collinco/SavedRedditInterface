@@ -26,9 +26,10 @@
         {{#each formattedData}}      
             <h3 id="{{@key}}">{{@key}}</h3>
             {{#each this}}
-                <div>
+                <span>
                     <a href="https://www.reddit.com{{permalink}}">{{title}}</a>
-                </div>
+                    <a href="#" id="{{id}}" onclick="unsubscribe('{{id}}')" style="font-size:75%;">[Unsubscribe]</a>
+                </span>
             {{/each}}
             <div>{{subreddit_name_prefixed}}</div>
             <br>
