@@ -1,7 +1,7 @@
-var unsubscribe = function (itemId) {
-    console.log('itemId', itemId)
+var unsave = function (itemId) {
+  if (confirm('Are you sure you want to unsave this item')) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/unsubscribe/' + itemId);
+    xhr.open('GET', '/unsave/' + itemId);
     //something would go here if it was a POST
     xhr.send(null);
 
@@ -15,4 +15,5 @@ var unsubscribe = function (itemId) {
             console.log('Error: ' + xhr.status); // An error occurred during the request.
           }
         }
-    };
+    }
+  };

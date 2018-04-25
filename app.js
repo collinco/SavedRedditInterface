@@ -73,8 +73,7 @@ app.get('/unformatted', (req, res) => {
     })
 })
 
-app.get('/unsubscribe/:id', (req, res) => {
-    console.log(req.params.id);
+app.get('/unsave/:id', (req, res) => {
     for (var i = 0, len = data.length; i < len; i++) {
         if (data[i].id === req.params.id) {
             r.getSubmission(req.params.id).unsave().then(test => {
