@@ -61,6 +61,8 @@ app.get('/', (req, res) => {
             pageTitle: 'About',
             formattedData : sortedObj,
             formmatedComments : sortedComments, 
+            hasPosts : !isEmpty(sortedObj),
+            hasComments : !isEmpty(sortedComments),
             subreddits : subreddits,
             counts : counts
         });
@@ -73,21 +75,42 @@ app.get('/unformatted', (req, res) => {
     })
 })
 
-app.get('/unsave/:id', (req, res) => {
+app.get('/unsaveSubmission/:id', (req, res) => {
+    console.log('deleting submission')    
     for (var i = 0, len = data.length; i < len; i++) {
-        if (data[i].id === req.params.id) {
+        if (data[i].id === req.params.id) {         
             r.getSubmission(req.params.id).unsave().then(test => {
                 res.send('success');
             })
         }
     }
     // res.send('fail')   
-    
+})
+
+app.get('/unsaveComment/:id', (req, res) => {
+    console.log('deleting comment')
+    for (var i = 0, len = data.length; i < len; i++) {
+        if (data[i].id === req.params.id) {
+            r.getComment(req.params.id).unsave().then(test => {
+                res.send('success');
+            })
+        }
+    }
+    // res.send('fail')    
 })
 
 app.listen(5656, () => {
     console.log('http://localhost:5656')
 })
+
+var isEmpty = function (obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return JSON.stringify(obj) === JSON.stringify({});
+}
 
 var seperateCategories = function (unsortedObj) {
     for (var i = 0; i < unsortedObj.length; i++) {

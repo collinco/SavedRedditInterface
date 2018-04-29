@@ -1,0 +1,14 @@
+.is-hidden {
+    display: none;
+  }
+  
+  .btn {
+    background: #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 5px;
+  }
+  
+  body {
+    padding: 40px;
+  }

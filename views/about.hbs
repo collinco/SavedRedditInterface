@@ -16,40 +16,42 @@
         </div>
     {{/each}}
 
+    
     <br>
-
-    <div>
-        {{> header}}
-    </div>
-
-    <h2>Saved Reddit Posts</h2>  
+    <br>
+    
+    {{#if hasPosts}}
+        <h2>Saved Reddit Posts</h2>  
         {{#each formattedData}}      
             <h3 id="{{@key}}">{{@key}}</h3>
             {{#each this}}
-                <div>
+                <div id="{{id}}">
                     <a href="https://www.reddit.com{{permalink}}">{{title}}</a>
-                    <a href="#" id="{{id}}" onclick="unsave('{{id}}')" style="font-size:75%;">[Unsave]</a>
+                    <a href="#" onclick="unsave('{{id}}','submission')" style="font-size:75%;">[Unsave]</a>
                 </div>
             {{/each}}
             <div>{{subreddit_name_prefixed}}</div>
             <br>
             <hr>
         {{/each}}
+    {{/if}}        
 
     <br>
-    <h2>Saved Reddit Comments</h2>  
-
-    {{#each formmatedComments}}   
-        <h3 id="{{@key}}">{{@key}}</h3>
-        {{#each this}}
-            <div>
-                <a href="{{link_permalink}}">{{body}}</a>
-            </div>
+    {{#if hasComments}}
+        <h2>Saved Reddit Comments</h2>  
+        {{#each formmatedComments}}   
+            <h3 id="{{@key}}">{{@key}}</h3>
+            {{#each this}}
+                <div id="{{id}}">
+                    <a href="{{link_permalink}}">{{body}}</a>
+                    <a href="#" onclick="unsave('{{id}}','comment')" style="font-size:75%;">[Unsave]</a>                
+                </div>
+            {{/each}}
+            <div>{{subreddit_name_prefixed}}</div>
+            <br>
+            <hr>
         {{/each}}
-        <div>{{subreddit_name_prefixed}}</div>
-        <br>
-        <hr>
-    {{/each}}
+    {{/if}}
     <footer>
         <p>Copyright {{getCurrentYear}}</p>
     </footer>
