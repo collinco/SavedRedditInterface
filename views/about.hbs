@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/html" href="mystyle.css">
+    <link rel="stylesheet" type="text/css" href="../views/mystyle.css">
     <title>My Reddit Saved</title>
 </head>
 <body>
@@ -22,12 +22,12 @@
     <br>    
 
     {{#if hasPosts}}
-        <h2>Saved Reddit Posts</h2>  
+        <h1>Saved Reddit Posts</h2>  
         {{#each formattedData}}      
             <h3 id="{{@key}}">{{@key}}</h3>
             {{#each this}}
-                <div id="{{id}}">
-                    <a href="https://www.reddit.com{{permalink}}">{{title}}</a>
+                <div id="{{id}}" class="hyperlink-row">
+                    <a class="posts" href="https://www.reddit.com{{permalink}}">{{title}}</a>
                     <a href="#" onclick="unsave('{{id}}','submission')" style="font-size:75%;">[Unsave]</a>
                 </div>
             {{/each}}
@@ -39,9 +39,9 @@
 
     <br>
     {{#if hasComments}}
-        <h2>Saved Reddit Comments</h2>  
+        <h1>Saved Reddit Comments</h2>  
         {{#each formmatedComments}}   
-            <h3 id="{{@key}}">{{@key}}</h3>
+            <h3 id="{{@key}}" class="hyperlink-row">{{@key}}</h3>
             {{#each this}}
                 <div id="{{id}}">
                     <a href="{{link_permalink}}">{{body}}</a>

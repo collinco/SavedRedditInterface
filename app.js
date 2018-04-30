@@ -20,6 +20,7 @@ hbs.registerHelper('getCurrentYear', function () {
 var app = express();
 
 app.use("/assets", express.static(__dirname + "/assets"));
+app.use("/views", express.static(__dirname + "/views"));
 
 const hostname = '127.0.0.1';
 const port = 3000;
