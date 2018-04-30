@@ -1,6 +1,8 @@
 var unsave = function (itemId, type) {
 
   if (confirm('Are you sure you want to unsave this item')) {
+    
+    event.preventDefault() // prevent page shifting to top
     var xhr = new XMLHttpRequest();
 
     if (type === 'submission'){
@@ -21,6 +23,8 @@ var unsave = function (itemId, type) {
             console.log('Error: ' + xhr.status); // An error occurred during the request.
           }
         }
+    } else {
+      event.preventDefault() // prevent page shifting to top
     }
   };
 
