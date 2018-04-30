@@ -37,6 +37,7 @@ var sortedObj = {};
 var sortedComments = {};
 var subreddits = [];
 var counts = {};
+var loadedSavedData = false;
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
@@ -52,21 +53,17 @@ app.get('/index', function (req, res) {
   })
 
 app.get('/', (req, res) => {
-      
-    // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-    var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
-        data = jsonResponse
-        seperateCategories(jsonResponse);
-        res.render('about.hbs', {
-            pageTitle: 'About',
-            formattedData : sortedObj,
-            formmatedComments : sortedComments, 
-            hasPosts : !isEmpty(sortedObj),
-            hasComments : !isEmpty(sortedComments),
-            subreddits : subreddits,
-            counts : counts
-        });
-    })
+    
+    if (!loadedSavedData) {
+        // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+        var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+            seperateCategories(jsonResponse);
+            loadedSavedData = true;
+            renderMainPage(res);
+        })
+    } else {
+        renderMainPage(res);
+    }
 })
 
 app.get('/unformatted', (req, res) => {
@@ -102,6 +99,18 @@ app.get('/unsaveComment/:id', (req, res) => {
 app.listen(5656, () => {
     console.log('http://localhost:5656')
 })
+
+var renderMainPage = function(res){
+    res.render('about.hbs', {
+        pageTitle: 'About',
+        formattedData : sortedObj,
+        formmatedComments : sortedComments, 
+        hasPosts : !isEmpty(sortedObj),
+        hasComments : !isEmpty(sortedComments),
+        subreddits : subreddits,
+        counts : counts
+    });
+}
 
 var isEmpty = function (obj) {
     for(var prop in obj) {
