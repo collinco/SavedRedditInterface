@@ -43,16 +43,6 @@ var loadedSavedData = false;
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
 
-// respond with "hello world" when a GET request is made to the homepage
-// check caching possibilties?
-app.get('/index', function (req, res) {
-    // res.send('hello Cole')
-    res.render('about.hbs', {
-        pageTitle: 'About',
-        test : crap
-    });
-  })
-
 app.get('/', (req, res) => {
     
     if (!loadedSavedData) {
@@ -66,6 +56,21 @@ app.get('/', (req, res) => {
         renderMainPage(res);
     }
 })
+
+app.get('/start', function(req,res) {
+    res.render('start.hbs');
+});
+
+// respond with "hello world" when a GET request is made to the homepage
+// check caching possibilties?
+app.get('/index', function (req, res) {
+    // res.send('hello Cole')
+    res.render('about.hbs', {
+        pageTitle: 'About',
+        test : crap
+    });
+  })
+
 
 app.get('/unformatted', (req, res) => {
     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
