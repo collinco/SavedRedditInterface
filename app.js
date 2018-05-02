@@ -39,26 +39,50 @@ var sortedComments = {};
 var subreddits = [];
 var counts = {};
 var loadedSavedData = false;
+var AuthCodeProperties = {};
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
 
-app.get('/', (req, res) => {
-    
-    if (!loadedSavedData) {
-        // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-        var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
-            seperateCategories(jsonResponse);
-            loadedSavedData = true;
-            renderMainPage(res);
-        })
-    } else {
-        renderMainPage(res);
-    }
+app.get('/authorize_callback', (req, res) => {
+    AuthCodeProperties = req.query;
+    res.redirect('/main')
 })
 
-app.get('/start', function(req,res) {
-    res.render('start.hbs');
+app.get('/main', (req, res) => {
+    
+    snoowrap.fromAuthCode({
+        code: AuthCodeProperties.code,
+        userAgent: config.userAgent,
+        clientId: config.clientId,
+        clientSecret: config.clientSecret,
+        redirectUri: "http://localhost:5656/authorize_callback"
+    }).then(r => {
+        if (!loadedSavedData) {
+            // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+            var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+                seperateCategories(jsonResponse);
+                loadedSavedData = true;
+                renderMainPage(res);
+            })
+        } else {
+            renderMainPage(res);
+        }
+    })
+})
+
+app.get('/', function(req,res) {
+    var authenticationUrl = snoowrap.getAuthUrl({
+        clientId: config.clientId,
+        scope: [ 'save', 'history', 'identity'],
+        redirectUri: 'http://localhost:5656/authorize_callback',
+        permanent: false,
+        state: 'fe311bebc52eb3da9bef8db6e63104d3' // a random string, this could be validated when the user is redirected back
+      });
+      // --> 'https://www.reddit.com/api/v1/authorize?client_id=foobarbaz&response_type=code&state= ...'
+      
+      res.redirect(authenticationUrl)
+    // res.render('start.hbs');
 });
 
 // respond with "hello world" when a GET request is made to the homepage
