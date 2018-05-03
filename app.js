@@ -46,10 +46,10 @@ app.set('view engine', 'hbs');
 
 app.get('/authorize_callback', (req, res) => {
     AuthCodeProperties = req.query;
-    res.redirect('/main')
+    res.redirect('/saved')
 })
 
-app.get('/main', (req, res) => {
+app.get('/saved', (req, res) => {
     
     snoowrap.fromAuthCode({
         code: AuthCodeProperties.code,
@@ -61,6 +61,7 @@ app.get('/main', (req, res) => {
         if (!loadedSavedData) {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
             var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+                data = jsonResponse;
                 seperateCategories(jsonResponse);
                 loadedSavedData = true;
                 renderMainPage(res);
@@ -70,6 +71,8 @@ app.get('/main', (req, res) => {
         }
     })
 })
+
+app.get('/')
 
 app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
@@ -81,7 +84,10 @@ app.get('/', function(req,res) {
       });
       // --> 'https://www.reddit.com/api/v1/authorize?client_id=foobarbaz&response_type=code&state= ...'
       
-      res.redirect(authenticationUrl)
+    res.render('start.hbs', {
+        authenticationUrl: authenticationUrl,
+    });
+    //   res.redirect(authenticationUrl)
     // res.render('start.hbs');
 });
 
