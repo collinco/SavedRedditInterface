@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": "9.2.x"
+    "node": "9.2.x",
+    "npm": "5.8.x"
   },
   "dependencies": {
     "express": "^4.16.3",
