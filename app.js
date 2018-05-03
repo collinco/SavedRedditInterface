@@ -23,7 +23,6 @@ app.use("/assets", express.static(__dirname + "/assets"));
 app.use("/views", express.static(__dirname + "/views"));
 
 const hostname = '127.0.0.1';
-const port = 3000;
 
 const r = new snoowrap({
     userAgent:  config.userAgent,
@@ -33,6 +32,9 @@ const r = new snoowrap({
     password: config.password
 });
 
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 8080;
+
 var data = null;
 var sortedObj = {};
 var sortedComments = {};
@@ -40,6 +42,8 @@ var subreddits = [];
 var counts = {};
 var loadedSavedData = false;
 var AuthCodeProperties = {};
+
+var url = "http://localhost:5656"
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
@@ -56,7 +60,7 @@ app.get('/saved', (req, res) => {
         userAgent: config.userAgent,
         clientId: config.clientId,
         clientSecret: config.clientSecret,
-        redirectUri: "http://localhost:5656/authorize_callback"
+        redirectUri: url + "/authorize_callback"
     }).then(r => {
         if (!loadedSavedData) {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
@@ -78,7 +82,7 @@ app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
         clientId: config.clientId,
         scope: [ 'save', 'history', 'identity'],
-        redirectUri: 'http://localhost:5656/authorize_callback',
+        redirectUri: url + '/authorize_callback',
         permanent: false,
         state: 'fe311bebc52eb3da9bef8db6e63104d3' // a random string, this could be validated when the user is redirected back
       });
@@ -132,8 +136,8 @@ app.get('/unsaveComment/:id', (req, res) => {
     // res.send('fail')    
 })
 
-app.listen(5656, () => {
-    console.log('http://localhost:5656')
+app.listen(port, () => {
+    console.log('Our app is running on http://localhost:' + port);
 })
 
 var renderMainPage = function(res){
