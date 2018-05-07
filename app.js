@@ -4,7 +4,6 @@ const snoowrap = require('snoowrap');
 const http = require('http');
 var express = require('express');
 const hbs = require('hbs');
-var config = require('./config');
 
 
 hbs.registerPartials(__dirname + '/views/partials');
@@ -21,16 +20,6 @@ var app = express();
 
 app.use("/assets", express.static(__dirname + "/assets"));
 app.use("/views", express.static(__dirname + "/views"));
-
-const hostname = '127.0.0.1';
-
-const r = new snoowrap({
-    userAgent:  config.userAgent,
-    clientId:  config.clientId,
-    clientSecret:  config.clientSecret,
-    username: config.username,
-    password: config.password
-});
 
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 8080;
@@ -53,34 +42,34 @@ app.get('/authorize_callback', (req, res) => {
     res.redirect('/saved')
 })
 
-app.get('/saved', (req, res) => {
+// app.get('/saved', (req, res) => {
     
-    snoowrap.fromAuthCode({
-        code: AuthCodeProperties.code,
-        userAgent: config.userAgent,
-        clientId: config.clientId,
-        clientSecret: config.clientSecret,
-        redirectUri: url + "/authorize_callback"
-    }).then(r => {
-        if (!loadedSavedData) {
-            // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-            var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
-                data = jsonResponse;
-                seperateCategories(jsonResponse);
-                loadedSavedData = true;
-                renderMainPage(res);
-            })
-        } else {
-            renderMainPage(res);
-        }
-    })
-})
+//     snoowrap.fromAuthCode({
+//         code: AuthCodeProperties.code,
+//         userAgent: config.userAgent,
+//         clientId: config.clientId,
+//         clientSecret: config.clientSecret,
+//         redirectUri: url + "/authorize_callback"
+//     }).then(r => {
+//         if (!loadedSavedData) {
+//             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+//             var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+//                 data = jsonResponse;
+//                 seperateCategories(jsonResponse);
+//                 loadedSavedData = true;
+//                 renderMainPage(res);
+//             })
+//         } else {
+//             renderMainPage(res);
+//         }
+//     })
+// })
 
 app.get('/')
 
 app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
-        clientId: config.clientId,
+        clientId: process.ENV.ClientId,
         scope: [ 'save', 'history', 'identity'],
         redirectUri: url + '/authorize_callback',
         permanent: false,
