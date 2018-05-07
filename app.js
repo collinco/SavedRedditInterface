@@ -32,7 +32,7 @@ var counts = {};
 var loadedSavedData = false;
 var AuthCodeProperties = {};
 
-var url = "https://reddit-saved-app.herokuapp.com/";
+var url = "https://reddit-saved-app.herokuapp.com"
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
