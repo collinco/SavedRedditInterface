@@ -32,7 +32,7 @@ var counts = {};
 var loadedSavedData = false;
 var AuthCodeProperties = {};
 
-var url = "https://reddit-saved-app.herokuapp.com"
+var url = "http://localhost:5656"
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
@@ -42,28 +42,28 @@ app.get('/authorize_callback', (req, res) => {
     res.redirect('/saved')
 })
 
-// app.get('/saved', (req, res) => {
+app.get('/saved', (req, res) => {
     
-//     snoowrap.fromAuthCode({
-//         code: AuthCodeProperties.code,
-//         userAgent: config.userAgent,
-//         clientId: config.clientId,
-//         clientSecret: config.clientSecret,
-//         redirectUri: url + "/authorize_callback"
-//     }).then(r => {
-//         if (!loadedSavedData) {
-//             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-//             var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
-//                 data = jsonResponse;
-//                 seperateCategories(jsonResponse);
-//                 loadedSavedData = true;
-//                 renderMainPage(res);
-//             })
-//         } else {
-//             renderMainPage(res);
-//         }
-//     })
-// })
+    snoowrap.fromAuthCode({
+        code: AuthCodeProperties.code,
+        userAgent: config.userAgent,
+        clientId: config.clientId,
+        clientSecret: config.clientSecret,
+        redirectUri: url + "/authorize_callback"
+    }).then(r => {
+        if (!loadedSavedData) {
+            // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+            var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+                data = jsonResponse;
+                seperateCategories(jsonResponse);
+                loadedSavedData = true;
+                renderMainPage(res);
+            })
+        } else {
+            renderMainPage(res);
+        }
+    })
+})
 
 app.get('/')
 
@@ -95,11 +95,11 @@ app.get('/index', function (req, res) {
   })
 
 
-app.get('/unformatted', (req, res) => {
-    var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
-        res.send(jsonResponse);
-    })
-})
+// app.get('/unformatted', (req, res) => {
+//     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
+//         res.send(jsonResponse);
+//     })
+// })
 
 app.get('/unsaveSubmission/:id', (req, res) => {
     console.log('deleting submission')    
