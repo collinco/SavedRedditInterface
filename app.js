@@ -69,7 +69,7 @@ app.get('/')
 
 app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
-        clientId: process.ENV.ClientId,
+        clientId: process.env.ClientId,
         scope: [ 'save', 'history', 'identity'],
         redirectUri: url + '/authorize_callback',
         permanent: false,
