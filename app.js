@@ -46,9 +46,9 @@ app.get('/saved', (req, res) => {
     
     snoowrap.fromAuthCode({
         code: AuthCodeProperties.code,
-        userAgent: config.userAgent,
-        clientId: config.clientId,
-        clientSecret: config.clientSecret,
+        userAgent: process.env.UserAgent,
+        clientId: process.env.ClientId,
+        clientSecret: process.env.ClientSecret,
         redirectUri: url + "/authorize_callback"
     }).then(r => {
         if (!loadedSavedData) {
