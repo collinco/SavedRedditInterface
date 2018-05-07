@@ -53,7 +53,7 @@ app.get('/saved', (req, res) => {
     }).then(r => {
         if (!loadedSavedData) {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-            var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => {
+            var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
                 data = jsonResponse;
                 seperateCategories(jsonResponse);
                 loadedSavedData = true;
