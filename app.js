@@ -35,7 +35,9 @@ var url = "https://reddit-saved-app.herokuapp.com"
 app.set('view engine', 'hbs');
 
 app.get('/authorize_callback', (req, res) => {
+    req.session.AuthCodeProperties = {};
     req.session.AuthCodeProperties = req.query;
+    console.log('req.session.AuthCodeProperties', req.session.AuthCodeProperties)
     res.redirect('/saved')
 })
 
@@ -52,6 +54,10 @@ app.get('/saved', (req, res) => {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
             var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
                 req.session.data = jsonResponse;
+                req.session.sortedObj = {};
+                req.session.sortedComments = {};
+                req.session.subreddits = [];
+                // req.sessions.counts = {};
                 seperateCategories(jsonResponse, req);
                 req.session.loadedSavedData = true;
                 renderMainPage(res, req);
