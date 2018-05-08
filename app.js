@@ -52,12 +52,12 @@ app.get('/saved', (req, res) => {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
             var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
                 req.session.data = jsonResponse;
-                seperateCategories(jsonResponse);
+                seperateCategories(jsonResponse, req);
                 req.session.loadedSavedData = true;
-                renderMainPage(res);
+                renderMainPage(res, req);
             })
         } else {
-            renderMainPage(res);
+            renderMainPage(res, req);
         }
     })
 })
@@ -126,7 +126,7 @@ app.listen(port, () => {
     console.log('Our app is running on http://localhost:' + port);
 })
 
-var renderMainPage = function(res){
+var renderMainPage = function(res,req){
     res.render('about.hbs', {
         pageTitle: 'About',
         formattedData : req.session.sortedObj,
@@ -146,7 +146,7 @@ var isEmpty = function (obj) {
     return JSON.stringify(obj) === JSON.stringify({});
 }
 
-var seperateCategories = function (unsortedObj) {
+var seperateCategories = function (unsortedObj, req) {
     for (var i = 0; i < unsortedObj.length; i++) {
         // if object is a post
         // using body_html to differentiate posts form comments
