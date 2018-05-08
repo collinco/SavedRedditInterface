@@ -3,6 +3,8 @@ const snoowrap = require('snoowrap');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const http = require('http');
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 const hbs = require('hbs');
 
 
@@ -18,19 +20,14 @@ hbs.registerHelper('getCurrentYear', function () {
 
 var app = express();
 
+app.use(cookieParser());
+app.use(session({secret: "Shh, its a secret!"}));
+
 app.use("/assets", express.static(__dirname + "/assets"));
 app.use("/views", express.static(__dirname + "/views"));
 
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 8080;
-
-var data = null;
-var sortedObj = {};
-var sortedComments = {};
-var subreddits = [];
-var counts = {};
-var loadedSavedData = false;
-var AuthCodeProperties = {};
 
 var url = "https://reddit-saved-app.herokuapp.com"
 
@@ -38,25 +35,25 @@ var url = "https://reddit-saved-app.herokuapp.com"
 app.set('view engine', 'hbs');
 
 app.get('/authorize_callback', (req, res) => {
-    AuthCodeProperties = req.query;
+    req.session.AuthCodeProperties = req.query;
     res.redirect('/saved')
 })
 
 app.get('/saved', (req, res) => {
     
     snoowrap.fromAuthCode({
-        code: AuthCodeProperties.code,
+        code: req.session.AuthCodeProperties.code,
         userAgent: process.env.UserAgent,
         clientId: process.env.ClientId,
         clientSecret: process.env.ClientSecret,
         redirectUri: url + "/authorize_callback"
     }).then(r => {
-        if (!loadedSavedData) {
+        if (!req.session.loadedSavedData) {
             // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
             var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-                data = jsonResponse;
+                req.session.data = jsonResponse;
                 seperateCategories(jsonResponse);
-                loadedSavedData = true;
+                req.session.loadedSavedData = true;
                 renderMainPage(res);
             })
         } else {
@@ -103,8 +100,8 @@ app.get('/index', function (req, res) {
 
 app.get('/unsaveSubmission/:id', (req, res) => {
     console.log('deleting submission')    
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (data[i].id === req.params.id) {         
+    for (var i = 0, len = req.session.data.length; i < len; i++) {
+        if (req.session.data[i].id === req.params.id) {         
             r.getSubmission(req.params.id).unsave().then(test => {
                 res.send('success');
             })
@@ -115,8 +112,8 @@ app.get('/unsaveSubmission/:id', (req, res) => {
 
 app.get('/unsaveComment/:id', (req, res) => {
     console.log('deleting comment')
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (data[i].id === req.params.id) {
+    for (var i = 0, len = req.session.data.length; i < len; i++) {
+        if (req.session.data[i].id === req.params.id) {
             r.getComment(req.params.id).unsave().then(test => {
                 res.send('success');
             })
@@ -132,12 +129,11 @@ app.listen(port, () => {
 var renderMainPage = function(res){
     res.render('about.hbs', {
         pageTitle: 'About',
-        formattedData : sortedObj,
-        formmatedComments : sortedComments, 
-        hasPosts : !isEmpty(sortedObj),
-        hasComments : !isEmpty(sortedComments),
-        subreddits : subreddits,
-        counts : counts
+        formattedData : req.session.sortedObj,
+        formmatedComments : req.session.sortedComments, 
+        hasPosts : !isEmpty(req.session.sortedObj),
+        hasComments : !isEmpty(req.session.sortedComments),
+        subreddits : req.session.subreddits
     });
 }
 
@@ -155,21 +151,21 @@ var seperateCategories = function (unsortedObj) {
         // if object is a post
         // using body_html to differentiate posts form comments
         if (unsortedObj[i].body_html === undefined) {
-            if (sortedObj[unsortedObj[i].subreddit_name_prefixed]){
-                sortedObj[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
+            if (req.session.sortedObj[unsortedObj[i].subreddit_name_prefixed]){
+                req.session.sortedObj[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
             } else {
-                sortedObj[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
+                req.session.sortedObj[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
     
                 //add to subreddits array since this is first TODO DRY
-                subreddits.push(unsortedObj[i].subreddit_name_prefixed);
+                req.session.subreddits.push(unsortedObj[i].subreddit_name_prefixed);
             }
         }
         // if object is a comment    
         else {
-            if (sortedComments[unsortedObj[i].subreddit_name_prefixed]){
-                sortedComments[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
+            if (req.session.sortedComments[unsortedObj[i].subreddit_name_prefixed]){
+                req.session.sortedComments[unsortedObj[i].subreddit_name_prefixed].push(unsortedObj[i]);
             } else {
-                sortedComments[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
+                req.session.sortedComments[unsortedObj[i].subreddit_name_prefixed] = [ unsortedObj[i] ];
             }
         }
     }
