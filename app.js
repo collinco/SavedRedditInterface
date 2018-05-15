@@ -1,25 +1,21 @@
 'use strict';
+
 const snoowrap = require('snoowrap');
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const http = require('http');
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const hbs = require('hbs');
 
-
+// messing around with partials
 hbs.registerPartials(__dirname + '/views/partials');
-//these can take params
-hbs.registerHelper('getCurrentYear', function () {
-    return new Date().getFullYear()
-})
-
 hbs.registerHelper('getCurrentYear', function () {
     return new Date().getFullYear()
 })
 
 var app = express();
 
+// using MemoryStore for sessions since this is a small app
 app.use(cookieParser());
 app.use(session({secret: "Shh, its a secret!"}));
 
@@ -28,21 +24,20 @@ app.use("/views", express.static(__dirname + "/views"));
 
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 8080;
-
 var url = "https://reddit-saved-app.herokuapp.com"
 
 // views folder is default directory express uses
 app.set('view engine', 'hbs');
 
+// redirect to /saved when authorization is successful
 app.get('/authorize_callback', (req, res) => {
     req.session.AuthCodeProperties = {};
     req.session.AuthCodeProperties = req.query;
-    console.log('req.session.AuthCodeProperties', req.session.AuthCodeProperties)
     res.redirect('/saved')
 })
 
+// call API for saved posts
 app.get('/saved', (req, res) => {
-    
     snoowrap.fromAuthCode({
         code: req.session.AuthCodeProperties.code,
         userAgent: process.env.UserAgent,
@@ -50,14 +45,14 @@ app.get('/saved', (req, res) => {
         clientSecret: process.env.ClientSecret,
         redirectUri: url + "/authorize_callback"
     }).then(r => {
+        // don't reload data if we have it
         if (!req.session.loadedSavedData) {
-            // var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+            // results returned can be changed here
             var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
                 req.session.data = jsonResponse;
                 req.session.sortedObj = {};
                 req.session.sortedComments = {};
                 req.session.subreddits = [];
-                // req.sessions.counts = {};
                 seperateCategories(jsonResponse, req);
                 req.session.loadedSavedData = true;
                 renderMainPage(res, req);
@@ -68,8 +63,7 @@ app.get('/saved', (req, res) => {
     })
 })
 
-app.get('/')
-
+// create authentication URL and render home page 
 app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
         clientId: process.env.ClientId,
@@ -83,27 +77,16 @@ app.get('/', function(req,res) {
     res.render('start.hbs', {
         authenticationUrl: authenticationUrl,
     });
-    //   res.redirect(authenticationUrl)
-    // res.render('start.hbs');
 });
 
-// respond with "hello world" when a GET request is made to the homepage
-// check caching possibilties?
-app.get('/index', function (req, res) {
-    // res.send('hello Cole')
-    res.render('about.hbs', {
-        pageTitle: 'About',
-        test : crap
-    });
-  })
-
-
+// post raw json
 // app.get('/unformatted', (req, res) => {
 //     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
 //         res.send(jsonResponse);
 //     })
 // })
 
+// unsave post
 app.get('/unsaveSubmission/:id', (req, res) => {
     console.log('deleting submission')    
     for (var i = 0, len = req.session.data.length; i < len; i++) {
@@ -116,6 +99,7 @@ app.get('/unsaveSubmission/:id', (req, res) => {
     // res.send('fail')   
 })
 
+// unsave comment
 app.get('/unsaveComment/:id', (req, res) => {
     console.log('deleting comment')
     for (var i = 0, len = req.session.data.length; i < len; i++) {
@@ -133,8 +117,8 @@ app.listen(port, () => {
 })
 
 var renderMainPage = function(res,req){
-    res.render('about.hbs', {
-        pageTitle: 'About',
+    res.render('saved.hbs', {
+        pageTitle: 'Saved',
         formattedData : req.session.sortedObj,
         formmatedComments : req.session.sortedComments, 
         hasPosts : !isEmpty(req.session.sortedObj),
