@@ -8,22 +8,21 @@
     <title>Reddit Saved</title>
 </head>
 <body>
-    <p id="demo"></p>
 
-    {{#each subreddits}}  
-        <div>
-            <a href="#{{this}}" style="padding: 10px 20px 10px 20px; float:left; margin:0">{{this}}</a>
-        </div>
-    {{/each}}
+    <div class="container">
+        {{#each subreddits}}  
+            <span class="child">
+                <a href="#{{this}}">{{this}}</a>
+            </span>
+        {{/each}}
+    </div>
 
     {{!-- {{#if !hasPosts}}
         {{#if !hasComments}}
             <h1>Your account has nothing saved :(</h1>  
         {{/if}}   
-    {{/if}}    --}}
+    {{/if}}  --}}
     
-    <br>
-    <br>
     <br>    
 
     {{#if hasPosts}}

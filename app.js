@@ -39,6 +39,18 @@ app.get('/authorize_callback', (req, res) => {
 
 // call API for saved posts
 app.get('/saved', (req, res) => {
+    // console.log('req.session.AuthCodeProperties.code1', req.session.AuthCodeProperties.code)
+    // snoowrap.fromAuthCode({
+    //     code: req.session.AuthCodeProperties.code,
+    //     userAgent: config.userAgent,
+    //     clientId: config.clientId,
+    //     clientSecret: config.clientSecret,
+    //     redirectUri: url + "/authorize_callback"
+    // }).then(r => {
+    //     qwer = r;
+    //     console.log('kms')
+    //     console.log('req.session.AuthCodeProperties.code', qwer)
+    // })
     snoowrap.fromAuthCode({
         code: req.session.AuthCodeProperties.code,
         userAgent: config.userAgent,
@@ -46,6 +58,8 @@ app.get('/saved', (req, res) => {
         clientSecret: config.clientSecret,
         redirectUri: url + "/authorize_callback"
     }).then(r => {
+        req.session.user = r;
+        console.log('r', r)
         // don't reload data if we have it
         if (!req.session.loadedSavedData) {
             // results returned can be changed here
@@ -57,6 +71,8 @@ app.get('/saved', (req, res) => {
                 seperateCategories(jsonResponse, req);
                 req.session.loadedSavedData = true;
                 renderMainPage(res, req);
+                console.log('r', req.session.user)
+                
             })
         } else {
             renderMainPage(res, req);
@@ -68,7 +84,7 @@ app.get('/saved', (req, res) => {
 app.get('/', function(req,res) {
     var authenticationUrl = snoowrap.getAuthUrl({
         clientId: config.clientId,
-        scope: [ 'save', 'history', 'identity'],
+        scope: [ 'save', 'history', 'identity', 'read'],
         redirectUri: url + '/authorize_callback',
         permanent: false,
         state: 'fe311bebc52eb3da9bef8db6e63104d3' // a random string, this could be validated when the user is redirected back
@@ -90,9 +106,13 @@ app.get('/', function(req,res) {
 // unsave post
 app.get('/unsaveSubmission/:id', (req, res) => {
     console.log('deleting submission')    
+    console.log('r', req.session.user)
     for (var i = 0, len = req.session.data.length; i < len; i++) {
-        if (req.session.data[i].id === req.params.id) {         
-            r.getSubmission(req.params.id).unsave().then(test => {
+        if (req.session.data[i].id === req.params.id) {       
+            console.log('req.session.AuthCodeProperties.code', req.session.user)
+            var e = req.session.user
+           
+           e.getSubmission(req.params.id).unsave().then(test => {
                 res.send('success');
             })
         }
