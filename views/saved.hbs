@@ -17,11 +17,11 @@
         {{/each}}
     </div>
 
-    {{!-- {{#if !hasPosts}}
-        {{#if !hasComments}}
-            <h1>Your account has nothing saved :(</h1>  
-        {{/if}}   
-    {{/if}}  --}}
+    {{#unless hasPosts}}
+        {{#unless hasComments}}
+            <h1>Your account has no posts or comments saved :(</h1>  
+        {{/unless}}   
+    {{/unless}} 
     
     <br>    
 

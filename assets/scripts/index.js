@@ -17,16 +17,16 @@ var unsave = function (itemId, type) {
         var DONE = 4; // readyState 4 means the request is done.
         var OK = 200; // status 200 is a successful return.
         if (xhr.readyState === DONE) {
-          if (xhr.status == OK) 
+          if (xhr.status == OK) {
             removeDiv(itemId);
           } else {
             console.log('Error: ' + xhr.status); // An error occurred during the request.
           }
-        }
-    } else {
-      event.preventDefault() // prevent page shifting to top
-    }
-  };
+        } else {
+      event.preventDefault(); // prevent page shifting to top
+    };
+  }
+}}
 
   var removeDiv = function (itemId) {
     var element = document.getElementById(itemId);

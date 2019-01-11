@@ -19,7 +19,11 @@ var app = express();
 
 // Using MemoryStore for sessions since this is a small app
 app.use(cookieParser());
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(session({
+    secret: "Shh, its a secret!",
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.use("/assets", express.static(__dirname + "/assets"));
 app.use("/views", express.static(__dirname + "/views"));
@@ -39,45 +43,48 @@ app.get('/authorize_callback', (req, res) => {
 
 // call API for saved posts
 app.get('/saved', (req, res) => {
-    // console.log('req.session.AuthCodeProperties.code1', req.session.AuthCodeProperties.code)
-    // snoowrap.fromAuthCode({
-    //     code: req.session.AuthCodeProperties.code,
-    //     userAgent: config.userAgent,
-    //     clientId: config.clientId,
-    //     clientSecret: config.clientSecret,
-    //     redirectUri: url + "/authorize_callback"
-    // }).then(r => {
-    //     qwer = r;
-    //     console.log('kms')
-    //     console.log('req.session.AuthCodeProperties.code', qwer)
-    // })
-    snoowrap.fromAuthCode({
-        code: req.session.AuthCodeProperties.code,
-        userAgent: config.userAgent,
-        clientId: config.clientId,
-        clientSecret: config.clientSecret,
-        redirectUri: url + "/authorize_callback"
-    }).then(r => {
-        req.session.user = r;
-        console.log('r', r)
-        // don't reload data if we have it
-        if (!req.session.loadedSavedData) {
-            // results returned can be changed here
-            var x = r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
-                req.session.data = jsonResponse;
-                req.session.sortedObj = {};
-                req.session.sortedComments = {};
-                req.session.subreddits = [];
-                seperateCategories(jsonResponse, req);
-                req.session.loadedSavedData = true;
+    if( !req.session.authObject) {
+        snoowrap.fromAuthCode({
+            code: req.session.AuthCodeProperties.code,
+            userAgent: config.userAgent,
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            redirectUri: url + "/authorize_callback"
+        }).then(r => {
+            req.session.authObject = r;
+
+            // don't reload data if we have it
+            if (!req.session.loadedSavedData) {
+                // results returned can be changed here
+                r.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+                    req.session.data = jsonResponse;
+                    req.session.sortedObj = {};
+                    req.session.sortedComments = {};
+                    req.session.subreddits = [];
+                    seperateCategories(jsonResponse, req);
+                    req.session.loadedSavedData = true;
+                    renderMainPage(res, req);                
+                })
+            } else {
                 renderMainPage(res, req);
-                console.log('r', req.session.user)
-                
-            })
-        } else {
-            renderMainPage(res, req);
-        }
-    })
+            }   
+        })
+    } else {
+
+        const authObject = new snoowrap(
+            req.session.authObject
+        );
+
+        authObject.getMe().getSavedContent({limit: Infinity}).then(jsonResponse => {
+            req.session.data = jsonResponse;
+            req.session.sortedObj = {};
+            req.session.sortedComments = {};
+            req.session.subreddits = [];
+            seperateCategories(jsonResponse, req);
+            req.session.loadedSavedData = true;
+            renderMainPage(res, req);    
+        })
+    }
 })
 
 // create authentication URL and render home page 
@@ -96,36 +103,40 @@ app.get('/', function(req,res) {
     });
 });
 
-// post raw json
-// app.get('/unformatted', (req, res) => {
-//     var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
-//         res.send(jsonResponse);
-//     })
-// })
+// get raw json
+app.get('/unformatted', (req, res) => {
+    var x = r.getMe().getSavedContent({limit: 3}).then(jsonResponse => { 
+        res.send(jsonResponse);
+    })
+})
 
 // unsave post
 app.get('/unsaveSubmission/:id', (req, res) => {
-    console.log('deleting submission')    
-    console.log('r', req.session.user)
+
+    const authObject = new snoowrap(
+        req.session.authObject
+    );
+      
     for (var i = 0, len = req.session.data.length; i < len; i++) {
-        if (req.session.data[i].id === req.params.id) {       
-            console.log('req.session.AuthCodeProperties.code', req.session.user)
-            var e = req.session.user
-           
-           e.getSubmission(req.params.id).unsave().then(test => {
+        if (req.session.data[i].id === req.params.id) {                   
+            authObject.getSubmission(req.params.id).unsave().then(test => {
                 res.send('success');
             })
         }
     }
-    // res.send('fail')   
 })
 
 // unsave comment
 app.get('/unsaveComment/:id', (req, res) => {
-    console.log('deleting comment')
+
+    const authObject = new snoowrap(
+        req.session.authObject
+    );
+
     for (var i = 0, len = req.session.data.length; i < len; i++) {
         if (req.session.data[i].id === req.params.id) {
-            r.getComment(req.params.id).unsave().then(test => {
+
+            authObject.getComment(req.params.id).unsave().then(test => {
                 res.send('success');
             })
         }
