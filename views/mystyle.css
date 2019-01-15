@@ -37,3 +37,14 @@ a:visited {
   margin-right: 25px;
   margin-bottom: 10px
 }
+
+button {
+  background:none!important;
+  color:inherit;
+  border:none; 
+  padding:0!important;
+  font: inherit;
+  /*border is optional*/
+  border-bottom:1px solid #317589; 
+  cursor: pointer;
+}

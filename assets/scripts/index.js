@@ -47,3 +47,12 @@ var unsave = function (itemId, type) {
       }
     })();
   }
+
+  var jqueryScrollDown = function(x) {
+
+    var escapedID = '#' + x.slice(0, 1) + "\\" + x.slice(1);
+
+    $('html, body').animate({
+      scrollTop: $(escapedID).offset().top
+    }, 400);  
+  }
