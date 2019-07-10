@@ -2,24 +2,34 @@
 
 Website: https://reddit-saved-app.herokuapp.com
 
-This tool is for Reddit user's to see all of their saved posts or comments all at once. This was meant to solve the problem of manually scrolling through ~25 items at a time and having lots of useless clutter. In addition to viewing your post/comments there is the ability to unsave them directly from this app.
+This tool is for Reddit user's to see all of their saved posts or comments all at once. This was meant to solve the problem of manually scrolling through ~25 items at a time and having lots of useless clutter. In addition to viewing your post/comments there is the ability to unsave them directly from the app. Comment any additional features you would like to see.
 
 ## Install Locally
 
-If you don't trust the website and/or want to mess with things locally, please feel free to clone the repo! The following steps will show how to make a Reddit authorized application and how to add its credentials to a config file.
+If you don't trust the website and/or want to mess with things locally, please feel free to clone the repo! Use the below steps to get up and running
 
-Please clone 'Master' and navigate to it
+1. Clone 'Master' and navigate to it
 
 ```
 git clone git@github.com:hippohipporhino/SavedRedditInterface.git
 cd SavedRedditInterface
 ```
 
-Create a config.js file with your Reddit App details
+2. Create a Reddit app using your profile (https://www.reddit.com/prefs/apps/)
+
+3. Create a config.js file with your Reddit App details 
 
 ```
-TODO
+var config = {};
+
+config.userAgent = "A Computer";
+config.clientId = "d1Oayi-DXkXFby";
+config.clientSecret = "2lunMerjKDS9syW-5OWYagDKJUsY";
+
+module.exports = config;
 ```
+
+4. run ```node app.js```
 
 ## Branches
 
