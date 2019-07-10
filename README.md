@@ -4,6 +4,11 @@ Website: https://reddit-saved-app.herokuapp.com
 
 This tool is for Reddit user's to see all of their saved posts or comments all at once. This was meant to solve the problem of manually scrolling through ~25 items at a time and having lots of useless clutter. In addition to viewing your post/comments there is the ability to unsave them directly from the app. Comment any additional features you would like to see.
 
+Notes
+- The top subreddit will be from the post/comment you most recently saved
+
+![Example of Reddit Saved](https://i.imgur.com/LLMlBKk.png)
+
 ## Install Locally
 
 If you don't trust the website and/or want to mess with things locally, please feel free to clone the repo! Use the below steps to get up and running
