@@ -28,6 +28,23 @@ a:visited {
   padding-top: 12%;
 }
 
-@media (max-width: 800px) {
-  /* CSS that should be displayed if width is equal to or less than 800px goes here */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.child {
+  margin-right: 25px;
+  margin-bottom: 10px
+}
+
+button {
+  background:none!important;
+  color:inherit;
+  border:none; 
+  padding:0!important;
+  font: inherit;
+  /*border is optional*/
+  border-bottom:1px solid #317589; 
+  cursor: pointer;
 }

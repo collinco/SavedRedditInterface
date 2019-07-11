@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../views/mystyle.css">
     <title>Reddit Saved</title>
 </head>
 <body>
-    <p id="demo"></p>
 
-    {{#each subreddits}}  
-        <div>
-            <a href="#{{this}}" style="padding: 10px 20px 10px 20px; float:left; margin:0">{{this}}</a>
-        </div>
-    {{/each}}
+    <div class="container">
+        {{#each subreddits}}  
+            <span class="child">
+                <button onclick="jqueryScrollDown('{{this}}')">{{this}}</button >
+            </span>
+        {{/each}}
+    </div>
 
-    {{!-- {{#if !hasPosts}}
-        {{#if !hasComments}}
-            <h1>Your account has nothing saved :(</h1>  
-        {{/if}}   
-    {{/if}}    --}}
+    {{#unless hasPosts}}
+        {{#unless hasComments}}
+            <h1>Your account has no posts or comments saved :(</h1>  
+        {{/unless}}   
+    {{/unless}} 
     
-    <br>
-    <br>
     <br>    
 
     {{#if hasPosts}}
