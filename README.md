@@ -28,7 +28,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-This tool lets Reddit users access all of their saved posts or comments on one page. This was meant to solve the problem of manually scrolling through ~25 items at a time with the Reddit website. In addition to viewing your post/comments, there is the ability to unsave them directly from the app. Users are authenticated with OAuth2 for 1 hour with relevent scopre.  I have this code hosted on a small and slow heroku instance here : https://reddit-saved-app.herokuapp.com. Please feel free to open a PRs for any improvement!
+This tool lets Reddit users access all of their saved posts or comments on one page. This was meant to solve the problem of manually scrolling through ~25 items at a time with the Reddit website. In addition to viewing your post/comments, there is the ability to un-save them directly from the app. Users are authenticated with OAuth2 for 1 hour with relevant score.  I have this code hosted on a small and slow heroku instance here : https://reddit-saved-app.herokuapp.com. Please feel free to open a PRs for any improvement!
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/13059208/115659013-849a5880-a2ff-11eb-8788-f347a8c63aa9.png">
@@ -46,7 +46,7 @@ After authenticating you will be able to
 - see all your saved items on one page
 - see how exactly how many posts or items you have
 - follow a link to the item
-- unsave an item 
+- un-save an item 
 
 <!-- Local Installation -->
 ## Local Installation
@@ -60,7 +60,7 @@ cd SavedRedditInterface
 ```
 2. Run `npm install` to get necessary packages.
 
-3. Create a Reddit app using your profile here : https://www.reddit.com/prefs/apps/. Make sure you set the redirct uri to your server
+3. Create a Reddit app using your profile here : https://www.reddit.com/prefs/apps/. Make sure you set the redirect URI to your server
 ![image](https://user-images.githubusercontent.com/13059208/115661814-a7c70700-a303-11eb-8806-ab8848397033.png)
 
 4. Create a config.json file with your Reddit App details. put it in the root directory where app.js is.
@@ -80,8 +80,8 @@ module.exports = config;
 <!-- Branches -->
 ## Branches
 
-the 'Master' branch is what should be downloaded if someone wants the code since it is missing the Heroku environment variables.
-the 'Heroku' branch is what is currently on the website hosted by Heroku. It is redeployed after new commits are pushed to 'Heroku'.
+- the 'Master' branch is what should be downloaded if someone wants the code since it is missing the Heroku environment variables.
+- the 'Heroku' branch is what is currently on the website hosted by Heroku. It is redeployed after new commits are pushed to 'Heroku'.
 
 <!-- //TODO -->
 ## TODO
