@@ -5,7 +5,6 @@
   <p align="center">https://reddit-saved-app.herokuapp.com</p>
 </p>
 
-
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
@@ -16,12 +15,8 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#local-installation">Local Installation</a></li>
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#branches">Branches</a></li>
@@ -33,31 +28,42 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-This tool is for Reddit user's to see all of their saved posts or comments all at once. This was meant to solve the problem of manually scrolling through ~25 items at a time and having lots of useless clutter. In addition to viewing your post/comments there is the ability to unsave them directly from the app. Comment any additional features you would like to see.
+This tool lets Reddit users access all of their saved posts or comments on one page. This was meant to solve the problem of manually scrolling through ~25 items at a time with the Reddit website. In addition to viewing your post/comments, there is the ability to unsave them directly from the app. Users are authenticated with OAuth2 for 1 hour with relevent scopre.  I have this code hosted on a small and slow heroku instance here : https://reddit-saved-app.herokuapp.com. Please feel free to open a PRs for any improvement!
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/13059208/115659013-849a5880-a2ff-11eb-8788-f347a8c63aa9.png">
+</p>
 
 ### Built With
 
-* [Snoowrap](https://github.com/not-an-aardvark/snoowrap) - The JS Reddit API wrapper used
+* [Snoowrap](https://github.com/not-an-aardvark/snoowrap) - JS Reddit API wrapper
+* [Handlebars](https://handlebarsjs.com/) - Templating engine
+* [Node.js](https://nodejs.org/en/)/[Express](http://expressjs.com/) - Backend
 
-<!-- GETTING STARTED -->
-## Getting Started
+<!-- Features -->
+## Features
+After authenticating you will be able to 
+- see all your saved items on one page
+- see how exactly how many posts or items you have
+- follow a link to the item
+- unsave an item 
 
-### Prerequisites
-
-### Installation
-
+<!-- Local Installation -->
+## Local Installation
 If you don't trust the website and/or want to mess with things locally, please feel free to clone the repo! Use the below steps to get up and running
 
-1. Clone 'Master' and navigate to it
+1. Clone the 'Master' branch and navigate to it.
 
 ```
-git clone git@github.com:hippohipporhino/SavedRedditInterface.git
+git clone git@github.com:collinco/SavedRedditInterface.git
 cd SavedRedditInterface
 ```
+2. Run `npm install` to get necessary packages.
 
-2. Create a Reddit app using your profile (https://www.reddit.com/prefs/apps/)
+3. Create a Reddit app using your profile here : https://www.reddit.com/prefs/apps/. Make sure you set the redirct uri to your server
+![image](https://user-images.githubusercontent.com/13059208/115661814-a7c70700-a303-11eb-8806-ab8848397033.png)
 
-3. Create a config.js file with your Reddit App details 
+4. Create a config.json file with your Reddit App details. put it in the root directory where app.js is.
 
 ```
 var config = {};
@@ -69,20 +75,22 @@ config.clientSecret = "2lunMerjKDS9syW-5OWYagDKJUsY";
 module.exports = config;
 ```
 
-4. run ```node app.js```
-
-<!-- USAGE EXAMPLES -->
-## Usage
+4. run `node app.js` to start the server.
 
 <!-- Branches -->
 ## Branches
 
-the 'Heroku' branch is what is currently on the website hosted by Heroku. It is redeployed after new commits are pushed to 'Heroku'.
 the 'Master' branch is what should be downloaded if someone wants the code since it is missing the Heroku environment variables.
+the 'Heroku' branch is what is currently on the website hosted by Heroku. It is redeployed after new commits are pushed to 'Heroku'.
 
 <!-- //TODO -->
 ## TODO
 
+Possible improvements:
+- ability to minimize comments and posts sections
+- better/lazy loading
+- revamp design, very basic currently
+- display user's account name
 
 ## License
 
