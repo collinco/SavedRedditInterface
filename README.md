@@ -40,7 +40,7 @@ This tool lets Reddit users access all of their saved posts or comments on one p
 
 <!-- Features -->
 ## Features
-After authenticating you will be able to 
+After authenticating users will be able to:
 - see all your saved items on one page
 - see how exactly how many posts or items you have
 - follow a link to the item
