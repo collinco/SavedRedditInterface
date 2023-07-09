@@ -1,4 +1,7 @@
 <!-- PROJECT LOGO -->
+<h1>7/9/2023 UPDATE</h1>
+<p>Confirmed this project still works. However the free tier of Heroku this was hosted on is <a target="_blank" href="https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq">no longer available</a>. I am no longer working on thie project and thus there are no plans to rehost.</p>
+
 <br />
 <p align="center">
   <h3 align="center">Saved Reddit Interface</h3>
@@ -61,13 +64,13 @@ cd SavedRedditInterface
 3. Create a Reddit app using your profile here : https://www.reddit.com/prefs/apps/. Make sure you set the redirect URI to your server
 ![image](https://user-images.githubusercontent.com/13059208/115661814-a7c70700-a303-11eb-8806-ab8848397033.png)
 
-4. Create a config.json file with your Reddit App details. put it in the root directory where app.js is.
+4. Create a config.js file with your Reddit App details. put it in the root directory where app.js is.
 
 ```
 var config = {};
 
 config.userAgent = "A Computer";
-config.clientId = "d1Oayi-DXkXFby";
+config.clientId = "d1OayiDXkXFby";
 config.clientSecret = "2lunMerjKDS9syW-5OWYagDKJUsY";
 
 module.exports = config;
