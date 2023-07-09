@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <h1>7/9/2023 UPDATE</h1>
-<p>Confirmed this project still works. However the free tier of Heroku this was hosted on is <a target="_blank" href="https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq">no longer available</a>. I am no longer working on thie project and thus there are no plans to rehost.</p>
+<p>Confirmed this project still works. However the free tier of Heroku this was hosted on is <a target="_blank" href="https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq">no longer available</a>. I am no longer working on this project and thus there are no plans to rehost.</p>
 
 <br />
 <p align="center">
