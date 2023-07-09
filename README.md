@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <h3 align="center">Saved Reddit Interface</h3>
-  <p align="center">https://reddit-saved-app.herokuapp.com</p>
+  <s><p align="center">https://reddit-saved-app.herokuapp.com</p></s>
 </p>
 
 <!-- TABLE OF CONTENTS -->
